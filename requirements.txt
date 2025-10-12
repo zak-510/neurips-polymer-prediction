@@ -1,0 +1,39 @@
+# Core ML Libraries
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.14.0
+accelerate>=0.20.0
+
+# Chemistry & Molecular Libraries
+rdkit>=2023.3.1
+deepchem>=2.7.1
+
+# Data Science
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# Progress & Logging
+tqdm>=4.65.0
+wandb>=0.15.0
+tensorboard>=2.13.0
+
+# Utilities
+pyyaml>=6.0
+python-dotenv>=1.0.0
+joblib>=1.3.0
+
+# Jupyter
+jupyter>=1.0.0
+ipykernel>=6.23.0
+ipywidgets>=8.0.0
+
+# Optional: Additional molecular transformers
+# Install these manually if needed:
+# pip install git+https://github.com/seyonechithrananda/bert-loves-chemistry.git

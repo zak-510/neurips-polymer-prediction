@@ -1,0 +1,105 @@
+# ChemBERTa Baseline Configuration
+
+model:
+  name: "ChemBERTa-MTR"
+  pretrained_model: "seyonec/ChemBERTa-zinc-base-v1"
+  num_tasks: 5
+  hidden_dim: 768
+  dropout: 0.1
+  freeze_encoder_epochs: 2  # Freeze encoder for first N epochs
+
+data:
+  train_path: "../data/raw/train.csv"
+  test_path: "../data/raw/test.csv"
+  supplement_paths:
+    - "../data/raw/train_supplement/dataset1.csv"
+    - "../data/raw/train_supplement/dataset2.csv"
+    - "../data/raw/train_supplement/dataset3.csv"
+    - "../data/raw/train_supplement/dataset4.csv"
+
+  # Target columns
+  targets:
+    - "Tg"
+    - "FFV"
+    - "Tc"
+    - "Density"
+    - "Rg"
+
+  # Data augmentation
+  smiles_augmentation: true
+  augmentation_factor: 3  # Generate 3 variants per SMILES
+
+  # Train/val split
+  val_split: 0.2
+  n_folds: 5
+  seed: 42
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 2.0e-5
+  weight_decay: 0.01
+  warmup_steps: 500
+
+  # Learning rate scheduler
+  scheduler: "cosine"
+
+  # Early stopping
+  patience: 10
+  min_delta: 0.001
+
+  # Gradient clipping
+  max_grad_norm: 1.0
+
+  # Mixed precision
+  fp16: true
+
+  # Checkpointing
+  save_top_k: 3
+  monitor_metric: "val_loss"
+
+loss:
+  type: "weighted_mse"
+  # Property-specific weights (can be adjusted based on importance)
+  weights:
+    Tg: 1.0
+    FFV: 1.0
+    Tc: 1.0
+    Density: 1.0
+    Rg: 1.0
+
+  # Handle missing values
+  ignore_missing: true
+
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+
+features:
+  # Additional molecular descriptors
+  use_rdkit_features: true
+  rdkit_features:
+    - "MolWt"
+    - "NumRotatableBonds"
+    - "NumAromaticRings"
+    - "TPSA"
+    - "LogP"
+
+  # Feature normalization
+  normalize: true
+  normalization_method: "standard"  # standard, minmax, robust
+
+experiment:
+  name: "chemberta_baseline"
+  output_dir: "experiments/chemberta_baseline"
+  log_every: 50
+  val_every: 500
+
+  # Logging
+  use_wandb: false
+  use_tensorboard: true
+
+  # Reproducibility
+  deterministic: true
+  seed: 42

@@ -1,0 +1,72 @@
+# Quick Test Configuration (1 epoch, small batch)
+
+model:
+  name: "ChemBERTa-MTR-Test"
+  pretrained_model: "seyonec/ChemBERTa-zinc-base-v1"
+  num_tasks: 5
+  hidden_dim: 768
+  dropout: 0.1
+  freeze_encoder_epochs: 0  # Don't freeze for quick test
+
+data:
+  train_path: "../data/raw/train.csv"
+  test_path: "../data/raw/test.csv"
+  supplement_paths: []  # Skip supplemental data for quick test
+
+  targets:
+    - "Tg"
+    - "FFV"
+    - "Tc"
+    - "Density"
+    - "Rg"
+
+  smiles_augmentation: false  # Disable for quick test
+  val_split: 0.2
+  seed: 42
+
+training:
+  epochs: 1  # Just 1 epoch for testing
+  batch_size: 16  # Smaller batch for faster iteration
+  learning_rate: 2.0e-5
+  weight_decay: 0.01
+  warmup_steps: 50
+
+  scheduler: "cosine"
+  patience: 10
+  min_delta: 0.001
+  max_grad_norm: 1.0
+  fp16: false  # Disable mixed precision for stability on first run
+
+  save_top_k: 1
+  monitor_metric: "val_loss"
+
+loss:
+  type: "weighted_mse"
+  weights:
+    Tg: 1.0
+    FFV: 1.0
+    Tc: 1.0
+    Density: 1.0
+    Rg: 1.0
+  ignore_missing: true
+
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+
+features:
+  use_rdkit_features: false  # Disable for quick test
+  normalize: true
+  normalization_method: "standard"
+
+experiment:
+  name: "quick_test"
+  output_dir: "experiments/quick_test"
+  log_every: 10
+  val_every: 100
+
+  use_wandb: false
+  use_tensorboard: false
+  deterministic: true
+  seed: 42
