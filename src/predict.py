@@ -48,9 +48,16 @@ def main():
     config = Config(args.config)
     print(f"Loaded config from {args.config}")
 
-    # Set device
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
+    # Set device (prioritize MPS for Apple Silicon, then CUDA, then CPU)
+    if torch.backends.mps.is_available():
+        device = torch.device('mps')
+        print(f"Using device: mps (Apple Silicon GPU)")
+    elif torch.cuda.is_available():
+        device = torch.device('cuda')
+        print(f"Using device: cuda (NVIDIA GPU)")
+    else:
+        device = torch.device('cpu')
+        print(f"Using device: cpu")
 
     # Create output directory
     output_dir = Path(args.output)
@@ -103,7 +110,7 @@ def main():
 
     # Load model
     print(f"Loading model from {args.model}...")
-    checkpoint = torch.load(args.model, map_location=device)
+    checkpoint = torch.load(args.model, map_location=device, weights_only=False)
 
     model = ChemBERTaMultiTask(
         pretrained_model=config['model']['pretrained_model'],

@@ -11,7 +11,11 @@ model:
 data:
   train_path: "../data/raw/train.csv"
   test_path: "../data/raw/test.csv"
-  supplement_paths: []  # Skip supplemental data for quick test
+  supplement_paths:
+    - "../data/raw/train_supplement/dataset1.csv"
+    - "../data/raw/train_supplement/dataset2.csv"
+    - "../data/raw/train_supplement/dataset3.csv"
+    - "../data/raw/train_supplement/dataset4.csv"
 
   targets:
     - "Tg"
@@ -25,17 +29,17 @@ data:
   seed: 42
 
 training:
-  epochs: 1  # Just 1 epoch for testing
-  batch_size: 16  # Smaller batch for faster iteration
+  epochs: 10  # Changed from quick_test (1 epoch) to full training
+  batch_size: 16  # Keep at 16 - batch_size 32 causes NaN on MPS!
   learning_rate: 2.0e-5
   weight_decay: 0.01
-  warmup_steps: 50
+  warmup_steps: 200  # Increased from 50 for better stability
 
   scheduler: "cosine"
   patience: 10
   min_delta: 0.001
   max_grad_norm: 1.0
-  fp16: false  # Disable mixed precision for stability on first run
+  fp16: false  # Disable mixed precision for stability on MPS
 
   save_top_k: 1
   monitor_metric: "val_loss"
@@ -61,8 +65,8 @@ features:
   normalization_method: "standard"
 
 experiment:
-  name: "quick_test"
-  output_dir: "experiments/quick_test"
+  name: "baseline"
+  output_dir: "experiments/baseline"
   log_every: 10
   val_every: 100
 

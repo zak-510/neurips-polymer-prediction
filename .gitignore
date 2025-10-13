@@ -20,9 +20,8 @@ data/processed/
 *.parquet
 *.feather
 
-# Models & Experiments
-experiments/*/checkpoints/
-experiments/*/logs/
+# Models & Experiments (models are too large for GitHub - store separately)
+experiments/
 *.pt
 *.pth
 *.ckpt
@@ -42,6 +41,7 @@ runs/
 # IDE
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
