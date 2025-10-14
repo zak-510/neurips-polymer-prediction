@@ -89,7 +89,6 @@ python src/predict.py --model experiments/best_model.pt --output submissions/
 
 ## Resources
 
-- [ChemBERTa Paper](https://arxiv.org/abs/2010.09885)
 - [ChemBERTa HuggingFace](https://huggingface.co/seyonec/ChemBERTa-zinc-base-v1)
 - [RDKit Documentation](https://www.rdkit.org/docs/)
 - [Competition Page](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025)
