@@ -50,7 +50,7 @@ ln -s ../neurips-open-polymer-prediction-2025 data/raw
 
 ### 3. Install RDKit (if pip fails)
 
-RDKit can be tricky to install. If pip fails, use conda:
+If pip fails, use conda:
 
 ```bash
 conda install -c conda-forge rdkit
